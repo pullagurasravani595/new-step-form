@@ -1,25 +1,41 @@
-import logo from './logo.svg';
+import {Component} from 'react'
+import { BrowserRouter, Route, Routes} from "react-router-dom";
+import Step from './context/Step'
+import Step1 from './components/Step1'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {step: 0, detailsList: []}
+
+  increaseStepCount = () => {
+    this.setState(prevState => prevState.step + 1)
+  }
+
+  decreaseStepCount = () => {
+    this.setState(prevState => prevState.step - 1)
+  }
+
+  updateList = (details) => {
+    this.setState(prevState => ({detailsList: [...prevState.detailsList, details]}))
+  }
+
+  render() {
+    const {step, detailsList} = this.state
+    return (
+      <Step.Provider value={{
+        step,
+        detailsList,
+        increaseStep: this.increaseStepCount,
+        decreaseStep: this.decreaseStepCount,
+        updateList: this.updateList,
+      }}>
+        <div className='app-container'>
+          <Step1 />
+        </div>
+      </Step.Provider> 
+        
+    )
+  }
 }
 
 export default App;
